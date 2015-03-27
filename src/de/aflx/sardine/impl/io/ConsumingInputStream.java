@@ -16,11 +16,11 @@
 
 package de.aflx.sardine.impl.io;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-
 import java.io.IOException;
 import java.io.InputStream;
+
+import ch.boye.httpclientandroidlib.HttpEntity;
+import ch.boye.httpclientandroidlib.HttpResponse;
 
 /**
  * Wrapper for the input stream, will consume the rest of the response on {@link ConsumingInputStream#close()}.

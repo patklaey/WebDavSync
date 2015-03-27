@@ -19,9 +19,9 @@ package de.aflx.sardine.impl.handler;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
+import ch.boye.httpclientandroidlib.HttpEntity;
+import ch.boye.httpclientandroidlib.HttpResponse;
+import ch.boye.httpclientandroidlib.StatusLine;
 
 import de.aflx.sardine.impl.SardineException;
 

@@ -16,9 +16,10 @@
 
 package de.aflx.sardine.impl.methods;
 
-import org.apache.http.client.methods.HttpRequestBase;
-
 import java.net.URI;
+
+import ch.boye.httpclientandroidlib.client.methods.HttpRequestBase;
+
 
 /**
  * Simple class for making WebDAV <code>MOVE</code> requests.

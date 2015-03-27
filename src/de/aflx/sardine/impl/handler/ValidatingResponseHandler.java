@@ -16,11 +16,13 @@
 
 package de.aflx.sardine.impl.handler;
 
+import ch.boye.httpclientandroidlib.HttpResponse;
+import ch.boye.httpclientandroidlib.HttpStatus;
+import ch.boye.httpclientandroidlib.StatusLine;
+import ch.boye.httpclientandroidlib.client.ResponseHandler;
 import de.aflx.sardine.impl.SardineException;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
-import org.apache.http.client.ResponseHandler;
+
+import android.util.Log;
 
 /**
  * Basic response handler which takes an url for documentation.
@@ -42,6 +44,7 @@ public abstract class ValidatingResponseHandler<T> implements ResponseHandler<T>
 	{
 		StatusLine statusLine = response.getStatusLine();
 		int statusCode = statusLine.getStatusCode();
+		Log.d("Sardine","Got response: " + statusCode);
 		if (statusCode >= HttpStatus.SC_OK && statusCode < HttpStatus.SC_MULTIPLE_CHOICES)
 		{
 			return;
