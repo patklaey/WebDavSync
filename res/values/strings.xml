@@ -4,5 +4,18 @@
     <string name="app_name">WebDavSync</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="url">URL</string>
+    <string name="remote_directory">Remote directory</string>
+    <string name="local_directory">Local directory</string>
+    <string name="browse">Browse</string>
+    <string name="authentication_required">Authentication required</string>
+    <string name="no_ssl_cert_check">Do not check SSL certs</string>
+    <string name="no_ssl_cert_check_explain">Warning: Use this option only if you know how runs the webdav server</string>
+    <string name="test_settings">Test Settings</string>
+    <string name="save">Save</string>
+    <string name="sync_inactive">Sync inactive</string>
+    <string name="sync_active">Sync active</string>
 
 </resources>

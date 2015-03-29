@@ -24,11 +24,11 @@
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Large Text"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:text="@string/url"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
-                android:id="@+id/editText1"
+                android:id="@+id/settings_url"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -38,67 +38,91 @@
             </EditText>
 
             <CheckBox
-                android:id="@+id/checkBox1"
+                android:id="@+id/settings_do_not_check_certs_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="CheckBox" />
+                android:text="@string/no_ssl_cert_check" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/holo_red_light"
+                android:text="@string/no_ssl_cert_check_explain"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <View style="@style/Divider" />
+
+            <CheckBox
+                android:id="@+id/settings_auth_required_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/authentication_required" />
 
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Large Text"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:text="@string/username"
+                android:enabled="false"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/settings_username_edittext"
+                android:enabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10" />
 
             <TextView
                 android:id="@+id/textView3"
+                android:enabled="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Large Text"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:text="@string/password"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
-                android:id="@+id/editText3"
+                android:id="@+id/settings_password_edittext"
+                android:enabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textPassword" />
 
+            <View style="@style/Divider" />
+            
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Large Text"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:text="@string/local_directory"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
-                android:id="@+id/editText4"
+                android:id="@+id/settings_local_directory_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10" />
 
             <Button
-                android:id="@+id/button1"
+                android:id="@+id/settings_browse_local"
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Button" />
+                android:text="@string/browse" />
 
+            <View style="@style/Divider" />
+            
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Large Text"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:text="@string/remote_directory"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
-                android:id="@+id/editText5"
+                android:id="@+id/settings_remote_directory_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10" />
@@ -108,31 +132,43 @@
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Button" />
+                android:text="@string/browse" />
 
+            <View style="@style/Divider" />
+            
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
 
                 <Button
-                    android:id="@+id/button3"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/settings_test_connection_button"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
                     android:layout_height="wrap_content"
-                    android:text="Button" />
+                    android:text="@string/test_settings" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent" />
 
                 <Button
-                    android:id="@+id/button4"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/settings_save_button"
+					android:layout_width="0dp"
+                    android:layout_weight="2"
                     android:layout_height="wrap_content"
-                    android:text="Button" />
+                    android:text="@string/save" />
 
             </LinearLayout>
 
+            <View style="@style/Divider" />
+            
             <ToggleButton
-                android:id="@+id/toggleButton1"
-                android:layout_width="wrap_content"
+                android:id="@+id/settings_sync_activation_togglebutton"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="ToggleButton" />
+                android:textOff="@string/sync_inactive"
+                android:textOn="@string/sync_active" />
 
         </LinearLayout>
     </ScrollView>
