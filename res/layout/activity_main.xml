@@ -24,14 +24,16 @@
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:labelFor="@+id/settings_url_edittext"
                 android:text="@string/url"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
-                android:id="@+id/settings_url"
+                android:id="@+id/settings_url_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:hint="@string/url_hint"
                 android:inputType="textUri" >
 
                 <requestFocus />
@@ -64,12 +66,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/username"
+                android:labelFor="@+id/settings_username_edittext"
                 android:enabled="false"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
                 android:id="@+id/settings_username_edittext"
                 android:enabled="false"
+                android:hint="@string/username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10" />
@@ -79,6 +83,7 @@
                 android:enabled="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:labelFor="@+id/settings_password_edittext"
                 android:text="@string/password"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -88,6 +93,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:hint="@string/password"
                 android:inputType="textPassword" />
 
             <View style="@style/Divider" />
@@ -97,12 +103,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/local_directory"
+                android:labelFor="@+id/settings_local_directory_edittext"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
                 android:id="@+id/settings_local_directory_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+				android:hint="@string/local_directory_hint"
                 android:ems="10" />
 
             <Button
@@ -119,12 +127,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/remote_directory"
+                android:labelFor="@+id/settings_remote_directory_edittext"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
                 android:id="@+id/settings_remote_directory_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/remote_directory_hint"
                 android:ems="10" />
 
             <Button
@@ -144,6 +154,7 @@
                     android:id="@+id/settings_test_connection_button"
                     android:layout_width="0dp"
                     android:layout_weight="2"
+                    android:onClick="testConnection"
                     android:layout_height="wrap_content"
                     android:text="@string/test_settings" />
 
@@ -157,6 +168,7 @@
 					android:layout_width="0dp"
                     android:layout_weight="2"
                     android:layout_height="wrap_content"
+                    android:enabled="false"
                     android:text="@string/save" />
 
             </LinearLayout>
@@ -167,6 +179,7 @@
                 android:id="@+id/settings_sync_activation_togglebutton"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:enabled="false"
                 android:textOff="@string/sync_inactive"
                 android:textOn="@string/sync_active" />
 

@@ -12,10 +12,13 @@
     <string name="browse">Browse</string>
     <string name="authentication_required">Authentication required</string>
     <string name="no_ssl_cert_check">Do not check SSL certs</string>
-    <string name="no_ssl_cert_check_explain">Warning: Use this option only if you know how runs the webdav server</string>
+    <string name="no_ssl_cert_check_explain">Warning: Use this option only if you know who runs the webdav server</string>
     <string name="test_settings">Test Settings</string>
     <string name="save">Save</string>
     <string name="sync_inactive">Sync inactive</string>
     <string name="sync_active">Sync active</string>
+    <string name="url_hint">http://webdav.server.tld/</string>
+    <string name="local_directory_hint">/path/to/local/folder</string>
+    <string name="remote_directory_hint">/path/to/remote/folder</string>
 
 </resources>
