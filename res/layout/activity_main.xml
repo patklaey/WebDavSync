@@ -59,10 +59,11 @@
                 android:id="@+id/settings_auth_required_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="authenticationRequiredCheckboxChecked"
                 android:text="@string/authentication_required" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/settings_username_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/username"
@@ -79,7 +80,7 @@
                 android:ems="10" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/settings_password_textview"
                 android:enabled="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

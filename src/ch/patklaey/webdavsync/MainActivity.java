@@ -55,7 +55,22 @@ public class MainActivity extends Activity {
 	    	new SardineTask(this.webdavConnection, this).execute(this.webdav_url);
 	    	
     	}
-    	
+    }
+    
+    public void authenticationRequiredCheckboxChecked(View view) {
+    	if ( ((CheckBox) view).isChecked() ) {
+    		findViewById(R.id.settings_username_edittext).setEnabled(true);
+    		findViewById(R.id.settings_password_edittext).setEnabled(true);
+    		findViewById(R.id.settings_username_textview).setEnabled(true);
+    		findViewById(R.id.settings_password_textview).setEnabled(true);
+
+    	} else {
+    		findViewById(R.id.settings_username_edittext).setEnabled(false);
+    		findViewById(R.id.settings_password_edittext).setEnabled(false);
+    		findViewById(R.id.settings_username_textview).setEnabled(false);
+    		findViewById(R.id.settings_password_textview).setEnabled(false);
+
+    	}
     }
 
     private boolean saveUserInput() {
@@ -207,6 +222,7 @@ public class MainActivity extends Activity {
             if ( "success".equals(result) ) {
             	message = "Connection tested successful";
             	this.activity.findViewById(R.id.settings_save_button).setEnabled(true);
+            	this.activity.findViewById(R.id.settings_sync_activation_togglebutton).setEnabled(true);
             } else {
             	message = "Connection could not be tested successfully";
             }
