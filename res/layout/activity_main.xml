@@ -143,6 +143,7 @@
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="browseRemote"
                 android:text="@string/browse" />
 
             <View style="@style/Divider" />
@@ -170,6 +171,7 @@
                     android:layout_weight="2"
                     android:layout_height="wrap_content"
                     android:enabled="false"
+                    android:onClick="saveConnectionSettings"
                     android:text="@string/save" />
 
             </LinearLayout>
@@ -184,7 +186,7 @@
                 android:text="@string/wifi_only" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/settings_wifi_only_explanation_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/wifi_only_explanation"

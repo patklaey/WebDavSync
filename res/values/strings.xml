@@ -22,5 +22,6 @@
     <string name="remote_directory_hint">/path/to/remote/folder</string>
     <string name="wifi_only">Wi-Fi only</string>
     <string name="wifi_only_explanation">If checked, files are only synchronized when connected to a Wi-Fi network</string>
+    <string name="title_activity_file_system_browser">FileSystemBrowser</string>
 
 </resources>
