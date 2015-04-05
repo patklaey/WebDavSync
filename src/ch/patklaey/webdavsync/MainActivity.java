@@ -1,21 +1,5 @@
 package ch.patklaey.webdavsync;
 
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
-import java.util.List;
-
-import ch.boye.httpclientandroidlib.conn.ssl.SSLSocketFactory;
-
-import de.aflx.sardine.DavResource;
-import de.aflx.sardine.Sardine;
-import de.aflx.sardine.SardineFactory;
-import de.aflx.sardine.impl.SardineImpl;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +14,16 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import ch.boye.httpclientandroidlib.conn.ssl.SSLSocketFactory;
+import de.aflx.sardine.DavResource;
+import de.aflx.sardine.Sardine;
+import de.aflx.sardine.SardineFactory;
+import de.aflx.sardine.impl.SardineImpl;
+
+import java.io.IOException;
+import java.security.*;
+import java.security.cert.CertificateException;
+import java.util.List;
 
 
 public class MainActivity extends Activity {
@@ -42,9 +36,9 @@ public class MainActivity extends Activity {
 	private String localDirectory = "";
 	private String remoteDirectory = "";
 	private boolean connectionWorks = false;
-	
-	private Sardine webdavConnection;
-	
+
+	private static Sardine webdavConnection;
+
 	private static final String PREF_USERNAME = "ch.patklaey.webdavsync.username";
 	private static final String PREF_PASSWORD = "ch.patklaey.webdavsync.password";
 	private static final String PREF_WEBDAV_URL = "ch.patklaey.webdavsync.webdavUrl";
@@ -72,9 +66,13 @@ public class MainActivity extends Activity {
         
         setUpUi();
     }
-    
-    private void setUpUi() {
-    	((EditText) findViewById(R.id.settings_url_edittext)).setText(this.webdavUrl);
+
+	public static Sardine getWebDavConnection() {
+		return webdavConnection;
+	}
+
+	private void setUpUi() {
+		((EditText) findViewById(R.id.settings_url_edittext)).setText(this.webdavUrl);
     	((CheckBox) findViewById(R.id.settings_do_not_check_certs_checkbox)).setChecked(!this.checkCert);
     	((CheckBox) findViewById(R.id.settings_auth_required_checkbox)).setChecked(this.authRequired);
     	((EditText) findViewById(R.id.settings_username_edittext)).setText(this.username);
@@ -112,11 +110,11 @@ public class MainActivity extends Activity {
     public void testConnection(View view) {
     	
     	if ( verifyUserInput() ) {
-	    	this.webdavConnection = getSardineImplementation(this.checkCert);
-	    	new SardineTask(this.webdavConnection, this).execute(this.webdavUrl);
-    	}
-    	
-    }
+			webdavConnection = getSardineImplementation(this.checkCert);
+			new SardineTask(webdavConnection, this).execute(this.webdavUrl);
+		}
+
+	}
     
     public void saveConnectionSettings(View view) {
     	
@@ -265,40 +263,22 @@ public class MainActivity extends Activity {
 					KeyStore keyStore = null;
 					try {
 						keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-						keyStore.load(null, null);  
-					} catch (KeyStoreException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (NoSuchAlgorithmException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (CertificateException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
+						keyStore.load(null, null);
+					} catch (KeyStoreException | NoSuchAlgorithmException | IOException | CertificateException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-		        	
-		        	SSLSocketFactory factory = null;
-	                try {
+
+					SSLSocketFactory factory = null;
+					try {
 						factory = new MySSLSocketFactory(keyStore);
-					} catch (KeyManagementException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (UnrecoverableKeyException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (NoSuchAlgorithmException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (KeyStoreException e) {
+					} catch (KeyManagementException | UnrecoverableKeyException | KeyStoreException | NoSuchAlgorithmException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-	                return factory;
-		        }
-		                               
+					return factory;
+				}
+
 			};
     	}
     	
@@ -357,8 +337,7 @@ public class MainActivity extends Activity {
 			Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
 			toast.setGravity(Gravity.CENTER, 0, 0);
 			toast.show();
-			return;
-       }
+		}
 
     	
     }
