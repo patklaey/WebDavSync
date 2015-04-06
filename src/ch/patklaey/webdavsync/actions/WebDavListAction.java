@@ -1,7 +1,6 @@
 package ch.patklaey.webdavsync.actions;
 
 import android.os.AsyncTask;
-import ch.patklaey.webdavsync.WebDavActionCaller;
 import de.aflx.sardine.DavResource;
 import de.aflx.sardine.Sardine;
 
@@ -42,7 +41,7 @@ public class WebDavListAction extends AsyncTask<String, Object, Boolean> {
     @Override
     protected void onPostExecute(Boolean success) {
         if (success) {
-            this.caller.setActionResult(this.result);
+            this.caller.onActionResult(this.result);
         }
     }
 

@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import ch.patklaey.webdavsync.actions.WebDavActionCaller;
 import ch.patklaey.webdavsync.actions.WebDavListAction;
 import de.aflx.sardine.DavResource;
 
@@ -72,7 +73,7 @@ public class FileSystemBrowser extends ListActivity implements WebDavActionCalle
 
     @Override
     @SuppressWarnings("unchecked")
-    public void setActionResult(Object result) {
+    public void onActionResult(Object result) {
         this.remoteResources = (LinkedList<DavResource>) result;
         this.setListContent();
     }

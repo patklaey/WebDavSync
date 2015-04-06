@@ -1,10 +1,10 @@
-package ch.patklaey.webdavsync;
+package ch.patklaey.webdavsync.actions;
 
 /**
  * Created by uni on 4/5/15.
  */
 public interface WebDavActionCaller {
 
-    void setActionResult(Object result);
+    void onActionResult(Object result);
 
 }
