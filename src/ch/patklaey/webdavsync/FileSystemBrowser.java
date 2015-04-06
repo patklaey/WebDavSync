@@ -21,8 +21,9 @@ public class FileSystemBrowser extends ListActivity implements WebDavActionCalle
     private List<DavResource> remoteResources;
     private List<String> displayDirectories;
     private String basePath;
+    private String selectedPath = "";
     private ArrayAdapter<String> directoryAdapter;
-    private String currentPath;
+    private String currentPath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,6 @@ public class FileSystemBrowser extends ListActivity implements WebDavActionCalle
         this.remoteResources = null;
         this.displayDirectories = new LinkedList<>();
 
-        this.currentPath = "";
         this.basePath = this.getIntent().getStringExtra("start");
 
         this.executeAction();
@@ -40,8 +40,24 @@ public class FileSystemBrowser extends ListActivity implements WebDavActionCalle
     }
 
     private void executeAction() {
-        Log.i(this.getLocalClassName(), "Listing WebDav resources for " + this.basePath + this.currentPath);
-        new WebDavListAction(MainActivity.getWebDavConnection(), this).execute(this.basePath + this.currentPath);
+        String path = this.basePath + this.currentPath + this.selectedPath;
+        Log.i(this.getLocalClassName(), "Listing WebDav resources for " + path);
+        new WebDavListAction(MainActivity.getWebDavConnection(), this).execute(path);
+    }
+
+    public void directoryBack(View view) {
+        this.currentPath = this.removeLastDirectoryFromPath(this.currentPath);
+        this.selectedPath = "";
+        this.executeAction();
+    }
+
+    private String removeLastDirectoryFromPath(String path) {
+        // Remove the last slash
+        path = path.substring(0, path.length() - 1);
+
+        // Remove the last directory from the path
+        int end = path.lastIndexOf("/");
+        return path.substring(0, end + 1);
     }
 
     @Override
@@ -65,7 +81,7 @@ public class FileSystemBrowser extends ListActivity implements WebDavActionCalle
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        this.currentPath += this.displayDirectories.get(position);
+        this.selectedPath = this.displayDirectories.get(position);
         this.executeAction();
     }
 
@@ -96,6 +112,7 @@ public class FileSystemBrowser extends ListActivity implements WebDavActionCalle
     @Override
     @SuppressWarnings("unchecked")
     public void onActionResult(Object result) {
+        this.currentPath += selectedPath;
         this.remoteResources = (LinkedList<DavResource>) result;
         this.setListContent();
         ((TextView) findViewById(R.id.current_path_textview)).setText(this.basePath + this.currentPath);

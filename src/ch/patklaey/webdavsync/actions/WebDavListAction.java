@@ -30,6 +30,8 @@ public class WebDavListAction extends AsyncTask<String, Object, Boolean> {
         try {
             String url = params[0];
             url = url.replace(" ", "%20");
+            if (!url.endsWith("/"))
+                url += "/";
             Log.i(this.getClass().getSimpleName(), "Query resources in " + url);
             resources = this.webDavConncetion.list(url);
             for (DavResource res : resources) {
