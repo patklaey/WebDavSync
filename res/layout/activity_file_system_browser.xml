@@ -9,19 +9,30 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ch.patklaey.webdavsync.FileSystemBrowser" >
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:text="Button" />
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_weight="2"
+            android:layout_height="0dp">
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Button"
+                android:id="@+id/button"
+                android:layout_weight="1"/>
+        <Button
+                android:id="@+id/button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Button"/>
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/textView1"
+            android:id="@+id/current_path_textview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text=""
+            android:layout_weight="2"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <ListView

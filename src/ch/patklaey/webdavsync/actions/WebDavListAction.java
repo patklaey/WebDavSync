@@ -1,6 +1,7 @@
 package ch.patklaey.webdavsync.actions;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import de.aflx.sardine.DavResource;
 import de.aflx.sardine.Sardine;
 
@@ -27,7 +28,10 @@ public class WebDavListAction extends AsyncTask<String, Object, Boolean> {
 
         List<DavResource> resources;
         try {
-            resources = this.webDavConncetion.list(params[0]);
+            String url = params[0];
+            url = url.replace(" ", "%20");
+            Log.i(this.getClass().getSimpleName(), "Query resources in " + url);
+            resources = this.webDavConncetion.list(url);
             for (DavResource res : resources) {
                 this.result.add(res);
             }
