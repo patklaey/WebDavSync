@@ -91,7 +91,12 @@ public class FileSystemBrowser extends ListActivity implements WebDavActionCalle
 
         for (DavResource res : this.remoteResources) {
             if (res.isDirectory()) {
-                this.displayDirectories.add(res.toString().replace(this.currentPath, ""));
+
+                String item = res.toString().replace(this.currentPath, "");
+                if (item.startsWith("/"))
+                    item = item.substring(1);
+
+                this.displayDirectories.add(item);
             }
         }
 
