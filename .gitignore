@@ -24,3 +24,11 @@ proguard/
 
 # Log Files
 *.log
+
+# IDEA specific files
+WebDavSync.iml
+.idea/*
+
+# Eclipse specific files
+.classpath
+.project
