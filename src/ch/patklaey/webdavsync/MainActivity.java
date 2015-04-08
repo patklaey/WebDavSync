@@ -27,6 +27,8 @@ import java.util.List;
 
 
 public class MainActivity extends Activity {
+
+	public static final String EXTRA_SELECTED_REMOTE_PATH = "ch.patklaey.webdavsync.extraSelectedRemotePath";
 	
 	private String webdavUrl = "";
 	private boolean checkCert = true;
@@ -48,6 +50,8 @@ public class MainActivity extends Activity {
 	private static final String PREF_CHECK_CERT = "ch.patklaey.webdavsync.checkCert";
 	private static final String PREF_SETTINGS_SAVED = "ch.patklaey.webdavsync.settingsSaved";
 	private static final String PREF_CONNECTION_WORKS = "ch.patklaey.webdavsync.connectionWorks";
+
+	private static final int REQUEST_BROWSE_REMOTE_DIRECTORY = 1;
 	
 	// TODO: Make seed secure
 	private static final String SEED = "myVerySecretSeed";
@@ -152,8 +156,8 @@ public class MainActivity extends Activity {
     public void browseRemote(View view) {
     	Intent intent = new Intent(this, FileSystemBrowser.class);
     	intent.putExtra("start", this.webdavUrl);
-    	this.startActivity(intent);
-    }
+		this.startActivityForResult(intent, REQUEST_BROWSE_REMOTE_DIRECTORY);
+	}
     
     public void authenticationRequiredCheckboxChecked(View view) {
     	if ( ((CheckBox) view).isChecked() ) {
@@ -244,8 +248,18 @@ public class MainActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
-    
-    public void setConnectionWorks(boolean works) {
+
+	@Override
+	protected void onActivityResult(int request_code, int result_code, Intent data) {
+		super.onActivityResult(request_code, result_code, data);
+
+		if (request_code == REQUEST_BROWSE_REMOTE_DIRECTORY && result_code == RESULT_OK) {
+			String selectedDirectory = data.getStringExtra(EXTRA_SELECTED_REMOTE_PATH);
+			((EditText) findViewById(R.id.settings_remote_directory_edittext)).setText(selectedDirectory);
+		}
+	}
+
+	public void setConnectionWorks(boolean works) {
     	this.connectionWorks = works;
     }
     

@@ -1,6 +1,7 @@
 package ch.patklaey.webdavsync;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -49,6 +50,13 @@ public class FileSystemBrowser extends ListActivity implements WebDavActionCalle
         this.currentPath = this.removeLastDirectoryFromPath(this.currentPath);
         this.selectedPath = "";
         this.executeAction();
+    }
+
+    public void selectCurrentPath(View view) {
+        Intent intent = new Intent();
+        intent.putExtra(MainActivity.EXTRA_SELECTED_REMOTE_PATH, this.currentPath);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     private String removeLastDirectoryFromPath(String path) {
