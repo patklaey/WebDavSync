@@ -36,12 +36,11 @@ public class FileSystemBrowser extends ListActivity implements WebDavActionCalle
 
         this.basePath = this.getIntent().getStringExtra("start");
 
-        this.executeAction();
+        this.listResources(this.basePath);
 
     }
 
-    private void executeAction() {
-        String path = this.basePath + this.currentPath + this.selectedPath;
+    private void listResources(String path) {
         Log.i(this.getLocalClassName(), "Listing WebDav resources for " + path);
         new WebDavListAction(MainActivity.getWebDavConnection(), this).execute(path);
     }
@@ -49,7 +48,7 @@ public class FileSystemBrowser extends ListActivity implements WebDavActionCalle
     public void directoryBack(View view) {
         this.currentPath = this.removeLastDirectoryFromPath(this.currentPath);
         this.selectedPath = "";
-        this.executeAction();
+        this.listResources(this.basePath + this.currentPath);
     }
 
     public void selectCurrentPath(View view) {
@@ -90,7 +89,7 @@ public class FileSystemBrowser extends ListActivity implements WebDavActionCalle
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         this.selectedPath = this.displayDirectories.get(position);
-        this.executeAction();
+        this.listResources(this.basePath + this.currentPath + this.selectedPath);
     }
 
     private void setListContent() {
@@ -125,7 +124,7 @@ public class FileSystemBrowser extends ListActivity implements WebDavActionCalle
     @Override
     @SuppressWarnings("unchecked")
     public void onActionResult(Object result) {
-        this.currentPath += selectedPath;
+        this.currentPath += this.selectedPath;
         this.remoteResources = (LinkedList<DavResource>) result;
         this.setListContent();
         ((TextView) findViewById(R.id.current_path_textview)).setText(this.basePath + this.currentPath);
