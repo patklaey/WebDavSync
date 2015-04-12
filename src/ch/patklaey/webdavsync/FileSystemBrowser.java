@@ -16,6 +16,8 @@ import de.aflx.sardine.DavResource;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FileSystemBrowser extends ListActivity implements WebDavActionCaller {
 
@@ -31,10 +33,28 @@ public class FileSystemBrowser extends ListActivity implements WebDavActionCalle
 
         this.displayDirectories = new LinkedList<>();
 
-        this.basePath = this.getIntent().getStringExtra("start");
+        String startingPoint = this.getIntent().getStringExtra("start");
+        this.basePath = getBasePathFromUrl(startingPoint);
+        this.currentPath = getCurrentPathFromUrl(startingPoint);
 
-        this.listResources(this.basePath);
+        this.listResources(this.basePath + this.currentPath);
 
+    }
+
+    private String getCurrentPathFromUrl(String url) {
+        Pattern currentPathPattern = Pattern.compile("^https?://[^/]+/(.+)$");
+        Matcher currentPathMatcher = currentPathPattern.matcher(url);
+        if (!currentPathMatcher.find())
+            return "";
+        return currentPathMatcher.group(1);
+    }
+
+    private String getBasePathFromUrl(String url) {
+        Pattern basePathPattern = Pattern.compile("^(https?://[^/]+/).*$");
+        Matcher basePathMatcher = basePathPattern.matcher(url);
+        if (!basePathMatcher.find())
+            return "";
+        return basePathMatcher.group(1);
     }
 
     private void listResources(String path) {
