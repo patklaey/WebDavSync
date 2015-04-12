@@ -19,11 +19,9 @@ import java.util.List;
 
 public class FileSystemBrowser extends ListActivity implements WebDavActionCaller {
 
-    private List<DavResource> remoteResources;
     private List<String> displayDirectories;
-    private String basePath;
+    private String basePath = "";
     private String selectedPath = "";
-    private ArrayAdapter<String> directoryAdapter;
     private String currentPath = "";
 
     @Override
@@ -31,7 +29,6 @@ public class FileSystemBrowser extends ListActivity implements WebDavActionCalle
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file_system_browser);
 
-        this.remoteResources = null;
         this.displayDirectories = new LinkedList<>();
 
         this.basePath = this.getIntent().getStringExtra("start");
@@ -92,11 +89,11 @@ public class FileSystemBrowser extends ListActivity implements WebDavActionCalle
         this.listResources(this.basePath + this.currentPath + this.selectedPath);
     }
 
-    private void setListContent() {
+    private void setListContent(LinkedList<DavResource> resources) {
 
         this.displayDirectories.clear();
 
-        for (DavResource res : this.remoteResources) {
+        for (DavResource res : resources) {
             if (res.isDirectory()) {
 
                 String item = res.toString().replace(this.currentPath, "");
@@ -112,21 +109,20 @@ public class FileSystemBrowser extends ListActivity implements WebDavActionCalle
         this.displayDirectories.remove(0);
         this.displayDirectories.add(0, ".");
 
-        this.directoryAdapter = new ArrayAdapter<>(this,
+        ArrayAdapter<String> directoryAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1,
                 this.displayDirectories);
 
-        ((ListView) findViewById(android.R.id.list)).setAdapter(this.directoryAdapter);
+        ((ListView) findViewById(android.R.id.list)).setAdapter(directoryAdapter);
 
-        this.directoryAdapter.notifyDataSetChanged();
+        directoryAdapter.notifyDataSetChanged();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public void onActionResult(Object result) {
         this.currentPath += this.selectedPath;
-        this.remoteResources = (LinkedList<DavResource>) result;
-        this.setListContent();
+        this.setListContent((LinkedList<DavResource>) result);
         ((TextView) findViewById(R.id.current_path_textview)).setText(this.basePath + this.currentPath);
     }
 }
