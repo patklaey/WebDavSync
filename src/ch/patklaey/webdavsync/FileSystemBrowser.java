@@ -25,6 +25,7 @@ public class FileSystemBrowser extends ListActivity implements WebDavActionCalle
     private String basePath = "";
     private String selectedPath = "";
     private String currentPath = "";
+    private String startingPath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class FileSystemBrowser extends ListActivity implements WebDavActionCalle
         String startingPoint = this.getIntent().getStringExtra("start");
         this.basePath = getBasePathFromUrl(startingPoint);
         this.currentPath = getCurrentPathFromUrl(startingPoint);
+        this.startingPath = this.currentPath;
 
         this.listResources(this.basePath + this.currentPath);
 
@@ -63,6 +65,8 @@ public class FileSystemBrowser extends ListActivity implements WebDavActionCalle
     }
 
     public void directoryBack(View view) {
+        if ("".equals(this.currentPath))
+            return;
         this.currentPath = this.removeLastDirectoryFromPath(this.currentPath);
         this.selectedPath = "";
         this.listResources(this.basePath + this.currentPath);
@@ -70,7 +74,7 @@ public class FileSystemBrowser extends ListActivity implements WebDavActionCalle
 
     public void selectCurrentPath(View view) {
         Intent intent = new Intent();
-        intent.putExtra(MainActivity.EXTRA_SELECTED_REMOTE_PATH, this.currentPath);
+        intent.putExtra(MainActivity.EXTRA_SELECTED_REMOTE_PATH, this.currentPath.replace(this.startingPath, ""));
         setResult(RESULT_OK, intent);
         finish();
     }
