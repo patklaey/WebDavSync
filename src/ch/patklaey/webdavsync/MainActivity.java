@@ -29,6 +29,7 @@ import java.util.List;
 public class MainActivity extends Activity {
 
     public static final String EXTRA_SELECTED_REMOTE_PATH = "ch.patklaey.webdavsync.extraSelectedRemotePath";
+    public static final String EXTRA_WEBDAV_URL_TO_BROWSE = "ch.patklaey.webdavsync.extraWebdavUrlToBrowse";
 
     private String webdavUrl = "";
     private boolean checkCert = true;
@@ -50,7 +51,6 @@ public class MainActivity extends Activity {
     private static final String PREF_CHECK_CERT = "ch.patklaey.webdavsync.checkCert";
     private static final String PREF_SETTINGS_SAVED = "ch.patklaey.webdavsync.settingsSaved";
     private static final String PREF_CONNECTION_WORKS = "ch.patklaey.webdavsync.connectionWorks";
-
     private static final int REQUEST_BROWSE_REMOTE_DIRECTORY = 1;
 
     // TODO: Make seed secure
@@ -155,7 +155,7 @@ public class MainActivity extends Activity {
 
     public void browseRemote(View view) {
         Intent intent = new Intent(this, FileSystemBrowser.class);
-        intent.putExtra("start", this.webdavUrl);
+        intent.putExtra(EXTRA_WEBDAV_URL_TO_BROWSE, this.webdavUrl);
         this.startActivityForResult(intent, REQUEST_BROWSE_REMOTE_DIRECTORY);
     }
 

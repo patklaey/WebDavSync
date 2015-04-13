@@ -34,7 +34,7 @@ public class FileSystemBrowser extends ListActivity implements WebDavActionCalle
 
         this.displayDirectories = new LinkedList<>();
 
-        String startingPoint = this.getIntent().getStringExtra("start");
+        String startingPoint = this.getIntent().getStringExtra(MainActivity.EXTRA_WEBDAV_URL_TO_BROWSE);
         this.basePath = getBasePathFromUrl(startingPoint);
         this.currentPath = getCurrentPathFromUrl(startingPoint);
         this.startingPath = this.currentPath;
