@@ -34,10 +34,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/url_hint"
-                android:inputType="textUri" >
-
-                <requestFocus />
-            </EditText>
+                android:inputType="textUri"/>
 
             <CheckBox
                 android:id="@+id/settings_do_not_check_certs_checkbox"
@@ -119,6 +116,7 @@
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="browseLocal"
                 android:text="@string/browse" />
 
             <View style="@style/Divider" />

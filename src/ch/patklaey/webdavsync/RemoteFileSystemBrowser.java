@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class FileSystemBrowser extends ListActivity implements WebDavActionCaller {
+public class RemoteFileSystemBrowser extends ListActivity implements WebDavActionCaller {
 
     private List<String> displayDirectories;
     private String basePath = "";
