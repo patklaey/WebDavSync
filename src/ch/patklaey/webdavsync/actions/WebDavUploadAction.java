@@ -1,6 +1,7 @@
 package ch.patklaey.webdavsync.actions;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import de.aflx.sardine.Sardine;
 
 import java.io.*;
@@ -32,13 +33,10 @@ public class WebDavUploadAction extends AsyncTask<String, Object, Boolean> {
         }
 
         File file = new File(params[0]);
-        int size = (int) file.length();
-        byte[] bytes = new byte[size];
         try {
             BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
-            buf.read(bytes, 0, bytes.length);
-            buf.close();
-            this.webDavConncetion.put(uploadBaseDir + "/" + params[0], bytes);
+            this.webDavConncetion.put(this.uploadBaseDir + "/" + file.getName(), buf);
+            Log.d("Uploader", "Uploaded file " + this.uploadBaseDir + "/" + file.getName());
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
