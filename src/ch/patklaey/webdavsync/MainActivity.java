@@ -32,6 +32,8 @@ public class MainActivity extends Activity {
     public static final String EXTRA_SELECTED_REMOTE_PATH = "ch.patklaey.webdavsync.extraSelectedRemotePath";
     public static final String EXTRA_WEBDAV_URL_TO_BROWSE = "ch.patklaey.webdavsync.extraWebdavUrlToBrowse";
     public static final String EXTRA_SELECTED_LOCAL_PATH = "ch.patklaey.webdavsync.extraSelectedLocalPath";
+    public static final String EXTRA_DIRECTORY_TO_OBSERVE = "ch.patklaey.webdavsync.extraDirectoryToObserve";
+    public static final String EXTRA_UPLOAD_BASE_DIRECTORY = "ch.patklaey.webdavsync.extraUploadDirectoryToObserve";
 
     private String webdavUrl = "";
     private boolean checkCert = true;
@@ -114,6 +116,13 @@ public class MainActivity extends Activity {
             this.remoteDirectory = sharedPref.getString(PREF_REMOTE_DIRECTORY, "");
             this.connectionWorks = sharedPref.getBoolean(PREF_CONNECTION_WORKS, false);
         }
+    }
+
+    public void activateSyncButtonClicked(View view) {
+        Intent intent = new Intent(this, DirectoryListener.class);
+        intent.putExtra(EXTRA_DIRECTORY_TO_OBSERVE, this.localDirectory);
+        intent.putExtra(EXTRA_UPLOAD_BASE_DIRECTORY, this.webdavUrl + this.remoteDirectory);
+        startService(intent);
     }
 
     public void testConnection(View view) {

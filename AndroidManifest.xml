@@ -35,6 +35,7 @@
                 android:value="ch.patklaey.webdavsync.MainActivity" />
         </activity>
         <activity android:name=".LocalFileSystemBrowser"/>
+        <service android:name=".DirectoryListener"/>
     </application>
 
 </manifest>

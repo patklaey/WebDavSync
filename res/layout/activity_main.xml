@@ -196,6 +196,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"
+                android:onClick="activateSyncButtonClicked"
                 android:textOff="@string/sync_inactive"
                 android:textOn="@string/sync_active" />
 
