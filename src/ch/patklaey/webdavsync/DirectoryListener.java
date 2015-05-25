@@ -8,6 +8,8 @@ import android.widget.Toast;
 
 public class DirectoryListener extends Service {
 
+    AndroidFileObserver observer;
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -20,11 +22,18 @@ public class DirectoryListener extends Service {
         String directory = intent.getStringExtra(MainActivity.EXTRA_DIRECTORY_TO_OBSERVE);
         String uploadBaseDir = intent.getStringExtra(MainActivity.EXTRA_UPLOAD_BASE_DIRECTORY);
 
-        AndroidFileObserver observer = new AndroidFileObserver(directory, uploadBaseDir);
-        observer.startWatching();
+        this.observer = new AndroidFileObserver(directory, uploadBaseDir);
+        this.observer.startWatching();
         Log.d("Service", "Observing " + directory);
 
         return START_STICKY;
     }
+
+    @Override
+    public void onDestroy() {
+        Log.d("Service", "Stopping observation");
+        this.observer.stopWatching();
+    }
+
 
 }

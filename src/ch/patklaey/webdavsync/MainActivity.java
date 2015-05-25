@@ -1,6 +1,7 @@
 package ch.patklaey.webdavsync;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,10 +12,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import ch.boye.httpclientandroidlib.conn.ssl.SSLSocketFactory;
 import de.aflx.sardine.DavResource;
 import de.aflx.sardine.Sardine;
@@ -93,6 +91,8 @@ public class MainActivity extends Activity {
             findViewById(R.id.settings_wifi_only_checkbox).setEnabled(true);
             findViewById(R.id.settings_wifi_only_explanation_textview).setEnabled(true);
         }
+
+        ((ToggleButton) findViewById(R.id.settings_sync_activation_togglebutton)).setChecked(isServiceRunning(DirectoryListener.class));
     }
 
     private void loadSettings() throws Exception {
@@ -114,9 +114,13 @@ public class MainActivity extends Activity {
 
     public void activateSyncButtonClicked(View view) {
         Intent intent = new Intent(this, DirectoryListener.class);
-        intent.putExtra(EXTRA_DIRECTORY_TO_OBSERVE, settings.getLocalDirectory());
-        intent.putExtra(EXTRA_UPLOAD_BASE_DIRECTORY, settings.getWebdavUrl() + settings.getRemoteDirectory());
-        startService(intent);
+        if (((ToggleButton) view).isChecked()) {
+            intent.putExtra(EXTRA_DIRECTORY_TO_OBSERVE, settings.getLocalDirectory());
+            intent.putExtra(EXTRA_UPLOAD_BASE_DIRECTORY, settings.getWebdavUrl() + settings.getRemoteDirectory());
+            startService(intent);
+        } else {
+            stopService(intent);
+        }
     }
 
     public void testConnection(View view) {
@@ -333,6 +337,16 @@ public class MainActivity extends Activity {
         }
 
         return sardine;
+    }
+
+    private boolean isServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private class SardineTask extends AsyncTask<String, Object, String> {
