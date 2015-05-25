@@ -71,4 +71,17 @@ public class Settings {
     public void setRemoteDirectory(String remoteDirectory) {
         this.remoteDirectory = remoteDirectory;
     }
+
+    @Override
+    public String toString() {
+        return "Settings{" +
+                "webdavUrl='" + webdavUrl + '\'' +
+                ", checkCert=" + checkCert +
+                ", authRequired=" + authRequired +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", localDirectory='" + localDirectory + '\'' +
+                ", remoteDirectory='" + remoteDirectory + '\'' +
+                '}';
+    }
 }

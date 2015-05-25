@@ -4,11 +4,11 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 public class DirectoryListener extends Service {
 
-    AndroidFileObserver observer;
+    public static final String LOG_TAG = DirectoryListener.class.getSimpleName();
+    private AndroidFileObserver observer;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -17,21 +17,34 @@ public class DirectoryListener extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
+        Log.d(LOG_TAG, "Starting service");
 
-        String directory = intent.getStringExtra(MainActivity.EXTRA_DIRECTORY_TO_OBSERVE);
-        String uploadBaseDir = intent.getStringExtra(MainActivity.EXTRA_UPLOAD_BASE_DIRECTORY);
+        SettingSaver settingSaver = new SettingSaver(this.getApplicationContext());
+        Settings settings;
 
-        this.observer = new AndroidFileObserver(directory, uploadBaseDir);
+        if (intent != null && intent.getBooleanExtra(MainActivity.EXTRA_STARTED_BY_APPLICATION, false)) {
+            settings = MainActivity.getSettings();
+            if (settingSaver.save(settings)) {
+                Log.d(LOG_TAG, "Settings saved successfully");
+            } else {
+                Log.w(LOG_TAG, "Could not write settings to database");
+            }
+        } else {
+            settings = settingSaver.load();
+        }
+
+        Log.d(LOG_TAG, "Using settings: " + settings.toString());
+
+        this.observer = new AndroidFileObserver(settings);
         this.observer.startWatching();
-        Log.d("Service", "Observing " + directory);
+        Log.d(LOG_TAG, "Observing " + settings.getLocalDirectory());
 
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
-        Log.d("Service", "Stopping observation");
+        Log.d(LOG_TAG, "Stopping observation");
         this.observer.stopWatching();
     }
 

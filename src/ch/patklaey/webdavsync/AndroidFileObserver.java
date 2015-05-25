@@ -2,8 +2,10 @@ package ch.patklaey.webdavsync;
 
 import android.os.FileObserver;
 import android.util.Log;
+import ch.patklaey.webdavsync.webdav.WebDavConnectionFactory;
 import ch.patklaey.webdavsync.webdav.actions.WebDavActionCaller;
 import ch.patklaey.webdavsync.webdav.actions.WebDavUploadAction;
+import de.aflx.sardine.Sardine;
 
 /**
  * Created by uni on 4/16/15.
@@ -12,11 +14,15 @@ public class AndroidFileObserver extends FileObserver implements WebDavActionCal
 
     private String basePath;
     private String uploadBasePath;
+    private Sardine webdavConnection;
+    private Settings settings;
 
-    public AndroidFileObserver(String path, String uploadBaseDir) {
-        super(path, FileObserver.ALL_EVENTS);
-        this.basePath = path;
-        this.uploadBasePath = uploadBaseDir;
+    public AndroidFileObserver(Settings settings) {
+        super(settings.getLocalDirectory(), FileObserver.ALL_EVENTS);
+        this.basePath = settings.getLocalDirectory();
+        this.uploadBasePath = settings.getWebdavUrl() + settings.getRemoteDirectory();
+        this.webdavConnection = WebDavConnectionFactory.fromSettings(settings);
+        this.settings = settings;
         Log.d("Observer", "Stated for directory " + this.basePath + " and upload directory " + this.uploadBasePath);
     }
 
@@ -28,7 +34,7 @@ public class AndroidFileObserver extends FileObserver implements WebDavActionCal
         if (event == FileObserver.CREATE) {
             String filename = this.basePath + path;
             Log.d("Observer", "File " + filename + " created!");
-            new WebDavUploadAction(MainActivity.getWebDavConnection(), this, this.uploadBasePath).execute(filename);
+            new WebDavUploadAction(this.webdavConnection, this, this.uploadBasePath).execute(filename);
         }
     }
 
