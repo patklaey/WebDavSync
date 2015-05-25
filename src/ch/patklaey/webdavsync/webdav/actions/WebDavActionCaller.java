@@ -1,4 +1,4 @@
-package ch.patklaey.webdavsync.actions;
+package ch.patklaey.webdavsync.webdav.actions;
 
 /**
  * Created by uni on 4/5/15.

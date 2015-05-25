@@ -1,4 +1,4 @@
-package ch.patklaey.webdavsync.actions;
+package ch.patklaey.webdavsync.webdav.actions;
 
 import android.os.AsyncTask;
 import android.util.Log;

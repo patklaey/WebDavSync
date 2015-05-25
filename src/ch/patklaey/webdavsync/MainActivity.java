@@ -13,15 +13,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
-import ch.boye.httpclientandroidlib.conn.ssl.SSLSocketFactory;
+import ch.patklaey.webdavsync.webdav.WebDavConnectionFactory;
 import de.aflx.sardine.DavResource;
 import de.aflx.sardine.Sardine;
-import de.aflx.sardine.SardineFactory;
-import de.aflx.sardine.impl.SardineImpl;
 
-import java.io.IOException;
-import java.security.*;
-import java.security.cert.CertificateException;
 import java.util.List;
 
 
@@ -126,7 +121,7 @@ public class MainActivity extends Activity {
     public void testConnection(View view) {
 
         if (verifyUserInput()) {
-            webdavConnection = getSardineImplementation(settings.checkCert());
+            webdavConnection = WebDavConnectionFactory.fromSettings(settings);
             new SardineTask(webdavConnection, this).execute(settings.getWebdavUrl());
         }
 
@@ -297,46 +292,6 @@ public class MainActivity extends Activity {
 
     public void setConnectionWorks(boolean works) {
         this.connectionWorks = works;
-    }
-
-    private Sardine getSardineImplementation(boolean check_cert) {
-        Sardine sardine;
-
-        if (check_cert) {
-            sardine = SardineFactory.begin();
-        } else {
-            sardine = new SardineImpl() {
-
-                @Override
-                protected SSLSocketFactory createDefaultSecureSocketFactory() {
-
-                    KeyStore keyStore = null;
-                    try {
-                        keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-                        keyStore.load(null, null);
-                    } catch (KeyStoreException | NoSuchAlgorithmException | IOException | CertificateException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-
-                    SSLSocketFactory factory = null;
-                    try {
-                        factory = new MySSLSocketFactory(keyStore);
-                    } catch (KeyManagementException | UnrecoverableKeyException | KeyStoreException | NoSuchAlgorithmException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    return factory;
-                }
-
-            };
-        }
-
-        if (settings.authRequired()) {
-            sardine.setCredentials(settings.getUsername(), settings.getPassword());
-        }
-
-        return sardine;
     }
 
     private boolean isServiceRunning(Class<?> serviceClass) {

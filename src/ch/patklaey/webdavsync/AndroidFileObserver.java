@@ -2,8 +2,8 @@ package ch.patklaey.webdavsync;
 
 import android.os.FileObserver;
 import android.util.Log;
-import ch.patklaey.webdavsync.actions.WebDavActionCaller;
-import ch.patklaey.webdavsync.actions.WebDavUploadAction;
+import ch.patklaey.webdavsync.webdav.actions.WebDavActionCaller;
+import ch.patklaey.webdavsync.webdav.actions.WebDavUploadAction;
 
 /**
  * Created by uni on 4/16/15.

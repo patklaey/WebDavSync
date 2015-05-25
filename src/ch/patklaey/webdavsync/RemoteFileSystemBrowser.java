@@ -10,8 +10,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import ch.patklaey.webdavsync.actions.WebDavActionCaller;
-import ch.patklaey.webdavsync.actions.WebDavListAction;
+import ch.patklaey.webdavsync.webdav.actions.WebDavActionCaller;
+import ch.patklaey.webdavsync.webdav.actions.WebDavListAction;
 import de.aflx.sardine.DavResource;
 
 import java.util.LinkedList;
