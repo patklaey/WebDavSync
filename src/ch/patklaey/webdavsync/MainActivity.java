@@ -35,13 +35,7 @@ public class MainActivity extends Activity {
     public static final String EXTRA_DIRECTORY_TO_OBSERVE = "ch.patklaey.webdavsync.extraDirectoryToObserve";
     public static final String EXTRA_UPLOAD_BASE_DIRECTORY = "ch.patklaey.webdavsync.extraUploadDirectoryToObserve";
 
-    private String webdavUrl = "";
-    private boolean checkCert = true;
-    private boolean authRequired = false;
-    private String username = "";
-    private String password = "";
-    private String localDirectory = "";
-    private String remoteDirectory = "";
+    private static Settings settings = new Settings();
     private boolean connectionWorks = false;
 
     private static Sardine webdavConnection;
@@ -67,7 +61,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.localDirectory = Environment.getExternalStorageDirectory().getAbsolutePath();
+        settings.setLocalDirectory(Environment.getExternalStorageDirectory().getAbsolutePath());
 
         try {
             loadSettings();
@@ -83,13 +77,13 @@ public class MainActivity extends Activity {
     }
 
     private void setUpUi() {
-        ((EditText) findViewById(R.id.settings_url_edittext)).setText(this.webdavUrl);
-        ((CheckBox) findViewById(R.id.settings_do_not_check_certs_checkbox)).setChecked(!this.checkCert);
-        ((CheckBox) findViewById(R.id.settings_auth_required_checkbox)).setChecked(this.authRequired);
-        ((EditText) findViewById(R.id.settings_username_edittext)).setText(this.username);
-        ((EditText) findViewById(R.id.settings_password_edittext)).setText(this.password);
-        ((EditText) findViewById(R.id.settings_local_directory_edittext)).setText(this.localDirectory);
-        ((EditText) findViewById(R.id.settings_remote_directory_edittext)).setText(this.remoteDirectory);
+        ((EditText) findViewById(R.id.settings_url_edittext)).setText(settings.getWebdavUrl());
+        ((CheckBox) findViewById(R.id.settings_do_not_check_certs_checkbox)).setChecked(!settings.checkCert());
+        ((CheckBox) findViewById(R.id.settings_auth_required_checkbox)).setChecked(settings.authRequired());
+        ((EditText) findViewById(R.id.settings_username_edittext)).setText(settings.getUsername());
+        ((EditText) findViewById(R.id.settings_password_edittext)).setText(settings.getPassword());
+        ((EditText) findViewById(R.id.settings_local_directory_edittext)).setText(settings.getLocalDirectory());
+        ((EditText) findViewById(R.id.settings_remote_directory_edittext)).setText(settings.getRemoteDirectory());
 
         this.authenticationRequiredCheckboxChecked(findViewById(R.id.settings_auth_required_checkbox));
 
@@ -104,32 +98,32 @@ public class MainActivity extends Activity {
     private void loadSettings() throws Exception {
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         if (sharedPref.getBoolean(PREF_SETTINGS_SAVED, false)) {
-            this.webdavUrl = sharedPref.getString(PREF_WEBDAV_URL, "");
-            this.checkCert = sharedPref.getBoolean(PREF_CHECK_CERT, true);
-            this.authRequired = sharedPref.getBoolean(PREF_AUTH_REQUIRED, false);
-            if (this.authRequired) {
+            settings.setWebdavUrl(sharedPref.getString(PREF_WEBDAV_URL, ""));
+            settings.setCheckCert(sharedPref.getBoolean(PREF_CHECK_CERT, true));
+            settings.setAuthRequired(sharedPref.getBoolean(PREF_AUTH_REQUIRED, false));
+            if (settings.authRequired()) {
                 // TODO: decrypt password for example with SimpleCrypto.decrypt(SEED,sharedPref.getStrung(PREF_PASSWORD,""))
-                this.password = sharedPref.getString(PREF_PASSWORD, "");
-                this.username = sharedPref.getString(PREF_USERNAME, "");
+                settings.setPassword(sharedPref.getString(PREF_PASSWORD, ""));
+                settings.setUsername(sharedPref.getString(PREF_USERNAME, ""));
             }
-            this.localDirectory = sharedPref.getString(PREF_LOCAL_DIRECTORY, "");
-            this.remoteDirectory = sharedPref.getString(PREF_REMOTE_DIRECTORY, "");
+            settings.setLocalDirectory(sharedPref.getString(PREF_LOCAL_DIRECTORY, ""));
+            settings.setRemoteDirectory(sharedPref.getString(PREF_REMOTE_DIRECTORY, ""));
             this.connectionWorks = sharedPref.getBoolean(PREF_CONNECTION_WORKS, false);
         }
     }
 
     public void activateSyncButtonClicked(View view) {
         Intent intent = new Intent(this, DirectoryListener.class);
-        intent.putExtra(EXTRA_DIRECTORY_TO_OBSERVE, this.localDirectory);
-        intent.putExtra(EXTRA_UPLOAD_BASE_DIRECTORY, this.webdavUrl + this.remoteDirectory);
+        intent.putExtra(EXTRA_DIRECTORY_TO_OBSERVE, settings.getLocalDirectory());
+        intent.putExtra(EXTRA_UPLOAD_BASE_DIRECTORY, settings.getWebdavUrl() + settings.getRemoteDirectory());
         startService(intent);
     }
 
     public void testConnection(View view) {
 
         if (verifyUserInput()) {
-            webdavConnection = getSardineImplementation(this.checkCert);
-            new SardineTask(webdavConnection, this).execute(this.webdavUrl);
+            webdavConnection = getSardineImplementation(settings.checkCert());
+            new SardineTask(webdavConnection, this).execute(settings.getWebdavUrl());
         }
 
     }
@@ -143,13 +137,13 @@ public class MainActivity extends Activity {
                 SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 // TODO: encrypt password for example with SimpleCrypto.encrypt(SEED,this.password)
-                editor.putString(PREF_PASSWORD, this.password);
-                editor.putString(PREF_USERNAME, this.username);
-                editor.putString(PREF_WEBDAV_URL, this.webdavUrl);
-                editor.putString(PREF_LOCAL_DIRECTORY, this.localDirectory);
-                editor.putString(PREF_REMOTE_DIRECTORY, this.remoteDirectory);
-                editor.putBoolean(PREF_AUTH_REQUIRED, this.authRequired);
-                editor.putBoolean(PREF_CHECK_CERT, this.checkCert);
+                editor.putString(PREF_PASSWORD, settings.getPassword());
+                editor.putString(PREF_USERNAME, settings.getUsername());
+                editor.putString(PREF_WEBDAV_URL, settings.getWebdavUrl());
+                editor.putString(PREF_LOCAL_DIRECTORY, settings.getLocalDirectory());
+                editor.putString(PREF_REMOTE_DIRECTORY, settings.getRemoteDirectory());
+                editor.putBoolean(PREF_AUTH_REQUIRED, settings.authRequired());
+                editor.putBoolean(PREF_CHECK_CERT, settings.checkCert());
                 editor.putBoolean(PREF_CONNECTION_WORKS, this.connectionWorks);
                 editor.putBoolean(PREF_SETTINGS_SAVED, true);
                 if (!editor.commit()) {
@@ -169,7 +163,7 @@ public class MainActivity extends Activity {
 
     public void browseRemote(View view) {
         Intent intent = new Intent(this, RemoteFileSystemBrowser.class);
-        intent.putExtra(EXTRA_WEBDAV_URL_TO_BROWSE, this.webdavUrl);
+        intent.putExtra(EXTRA_WEBDAV_URL_TO_BROWSE, settings.getWebdavUrl());
         this.startActivityForResult(intent, REQUEST_BROWSE_REMOTE_DIRECTORY);
     }
 
@@ -196,13 +190,14 @@ public class MainActivity extends Activity {
 
     private boolean verifyUserInput() {
 
-        this.webdavUrl = ((TextView) findViewById(R.id.settings_url_edittext)).getText().toString();
-        if (!this.webdavUrl.endsWith("/")) {
-            this.webdavUrl += "/";
-            ((TextView) findViewById(R.id.settings_url_edittext)).setText(this.webdavUrl);
+        String webdavUrl = ((TextView) findViewById(R.id.settings_url_edittext)).getText().toString();
+        if (!webdavUrl.endsWith("/")) {
+            webdavUrl += "/";
+            ((TextView) findViewById(R.id.settings_url_edittext)).setText(webdavUrl);
         }
 
-        if ("".equals(this.webdavUrl)) {
+
+        if ("".equals(webdavUrl)) {
             Context context = getApplicationContext();
             String message = "Please enter the webdav server url";
             Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
@@ -211,15 +206,17 @@ public class MainActivity extends Activity {
             return false;
         }
 
-        this.checkCert = !((CheckBox) findViewById(R.id.settings_do_not_check_certs_checkbox)).isChecked();
+        settings.setWebdavUrl(webdavUrl);
 
-        this.authRequired = ((CheckBox) findViewById(R.id.settings_auth_required_checkbox)).isChecked();
+        settings.setCheckCert(!((CheckBox) findViewById(R.id.settings_do_not_check_certs_checkbox)).isChecked());
 
-        if (this.authRequired) {
-            this.username = ((TextView) findViewById(R.id.settings_username_edittext)).getText().toString();
-            this.password = ((TextView) findViewById(R.id.settings_password_edittext)).getText().toString();
+        settings.setAuthRequired(((CheckBox) findViewById(R.id.settings_auth_required_checkbox)).isChecked());
 
-            if ("".equals(this.username) || "".equals(this.password)) {
+        if (settings.authRequired()) {
+            String username = ((TextView) findViewById(R.id.settings_username_edittext)).getText().toString();
+            String password = ((TextView) findViewById(R.id.settings_password_edittext)).getText().toString();
+
+            if ("".equals(username) || "".equals(password)) {
                 Context context = getApplicationContext();
                 String message = "Please enter username and password";
                 Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
@@ -227,12 +224,15 @@ public class MainActivity extends Activity {
                 toast.show();
                 return false;
             }
+
+            settings.setPassword(password);
+            settings.setUsername(username);
         }
 
-        this.localDirectory = ((TextView) findViewById(R.id.settings_local_directory_edittext)).getText().toString();
-        this.remoteDirectory = ((TextView) findViewById(R.id.settings_remote_directory_edittext)).getText().toString();
+        String localDirectory = ((TextView) findViewById(R.id.settings_local_directory_edittext)).getText().toString();
+        String remoteDirectory = ((TextView) findViewById(R.id.settings_remote_directory_edittext)).getText().toString();
 
-        if ("".equals(this.localDirectory)) {
+        if ("".equals(localDirectory)) {
             Context context = getApplicationContext();
             String message = "Please specify the local directory";
             Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
@@ -241,7 +241,9 @@ public class MainActivity extends Activity {
             return false;
         }
 
-        if ("".equals(this.remoteDirectory)) {
+        settings.setLocalDirectory(localDirectory);
+
+        if ("".equals(remoteDirectory)) {
             Context context = getApplicationContext();
             String message = "Please specify the remote directory";
             Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
@@ -249,6 +251,8 @@ public class MainActivity extends Activity {
             toast.show();
             return false;
         }
+
+        settings.setRemoteDirectory(remoteDirectory);
 
         return true;
     }
@@ -324,8 +328,8 @@ public class MainActivity extends Activity {
             };
         }
 
-        if (this.authRequired) {
-            sardine.setCredentials(this.username, this.password);
+        if (settings.authRequired()) {
+            sardine.setCredentials(settings.getUsername(), settings.getPassword());
         }
 
         return sardine;
