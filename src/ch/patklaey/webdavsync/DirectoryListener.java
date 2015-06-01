@@ -35,7 +35,7 @@ public class DirectoryListener extends Service {
 
         Log.d(LOG_TAG, "Using settings: " + settings.toString());
 
-        this.observer = new AndroidFileObserver(settings);
+        this.observer = new AndroidFileObserver(settings, this);
         this.observer.startWatching();
         Log.d(LOG_TAG, "Observing " + settings.getLocalDirectory());
 

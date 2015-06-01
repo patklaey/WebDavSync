@@ -8,6 +8,7 @@ public class Settings {
     private String webdavUrl = "";
     private boolean checkCert = true;
     private boolean authRequired = false;
+    private boolean wifiOnly = true;
     private String username = "";
     private String password = "";
     private String localDirectory = "";
@@ -72,12 +73,21 @@ public class Settings {
         this.remoteDirectory = remoteDirectory;
     }
 
+    public boolean wifiOnly() {
+        return wifiOnly;
+    }
+
+    public void setWifiOnly(boolean wifiOnly) {
+        this.wifiOnly = wifiOnly;
+    }
+
     @Override
     public String toString() {
         return "Settings{" +
                 "webdavUrl='" + webdavUrl + '\'' +
                 ", checkCert=" + checkCert +
                 ", authRequired=" + authRequired +
+                ", wifiOnly=" + wifiOnly +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", localDirectory='" + localDirectory + '\'' +

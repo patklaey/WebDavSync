@@ -20,6 +20,7 @@ public class SettingSaver extends SQLiteOpenHelper {
     private static final String KEY_PASSWORD = "password";
     private static final String KEY_LOCAL_DIRECTORY = "local_directory";
     private static final String KEY_REMOTE_DIRECTORY = "remote_directory";
+    private static final String KEY_WIFI_ONLY = "wifi_only";
 
     private static final int INDEX_WEBDAV_URL = 0;
     private static final int INDEX_CHECK_CERT = 1;
@@ -28,6 +29,7 @@ public class SettingSaver extends SQLiteOpenHelper {
     private static final int INDEX_PASSWORD = 4;
     private static final int INDEX_LOCAL_DIRECTORY = 5;
     private static final int INDEX_REMOTE_DIRECTORY = 6;
+    private static final int INDEX_WIFI_ONLY = 7;
 
     private static final int TRUE = 1;
     private static final int FALSE = 0;
@@ -36,7 +38,7 @@ public class SettingSaver extends SQLiteOpenHelper {
     private static final String CREATE_TBALE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "("
             + KEY_WEBDAV_URL + " TEXT PRIMARY KEY," + KEY_CHECK_CERT + " INTEGER," + KEY_AUTH_REQUIRED + " INTEGER,"
             + KEY_USERNAME + " TEXT," + KEY_PASSWORD + " TEXT," + KEY_LOCAL_DIRECTORY + " TEXT,"
-            + KEY_REMOTE_DIRECTORY + " TEXT )";
+            + KEY_REMOTE_DIRECTORY + " TEXT," + KEY_WIFI_ONLY + " INTEGER )";
 
     public SettingSaver(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -64,15 +66,17 @@ public class SettingSaver extends SQLiteOpenHelper {
         ContentValues attributes = new ContentValues();
 
         // Add all  attributes
-        int auth_required = settings.authRequired() ? TRUE : FALSE;
-        int check_cert = settings.checkCert() ? TRUE : FALSE;
+        int authRequired = settings.authRequired() ? TRUE : FALSE;
+        int checkCert = settings.checkCert() ? TRUE : FALSE;
+        int wifiOnly = settings.wifiOnly() ? TRUE : FALSE;
         attributes.put(KEY_WEBDAV_URL, settings.getWebdavUrl());
-        attributes.put(KEY_AUTH_REQUIRED, auth_required);
-        attributes.put(KEY_CHECK_CERT, check_cert);
+        attributes.put(KEY_AUTH_REQUIRED, authRequired);
+        attributes.put(KEY_CHECK_CERT, checkCert);
         attributes.put(KEY_LOCAL_DIRECTORY, settings.getLocalDirectory());
         attributes.put(KEY_PASSWORD, settings.getPassword());
         attributes.put(KEY_REMOTE_DIRECTORY, settings.getRemoteDirectory());
         attributes.put(KEY_USERNAME, settings.getUsername());
+        attributes.put(KEY_WIFI_ONLY, wifiOnly);
 
         // Insert the settings into the database
         long success = db.insert(TABLE_NAME, null, attributes);
@@ -95,6 +99,7 @@ public class SettingSaver extends SQLiteOpenHelper {
         settings.setPassword(cursor.getString(INDEX_PASSWORD));
         settings.setAuthRequired(cursor.getInt(INDEX_AUTH_REQUIRED) == 1);
         settings.setCheckCert(cursor.getInt(INDEX_CHECK_CERT) == 1);
+        settings.setWifiOnly(cursor.getInt(INDEX_WIFI_ONLY) == 1);
 
         return settings;
     }

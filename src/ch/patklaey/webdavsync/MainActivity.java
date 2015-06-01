@@ -39,6 +39,7 @@ public class MainActivity extends Activity {
     private static final String PREF_REMOTE_DIRECTORY = "ch.patklaey.webdavsync.remoteDirectory";
     private static final String PREF_AUTH_REQUIRED = "ch.patklaey.webdavsync.authRequired";
     private static final String PREF_CHECK_CERT = "ch.patklaey.webdavsync.checkCert";
+    private static final String PREF_WIFI_ONLY = "ch.patklaey.webdavsync.wifiOnly";
     private static final String PREF_SETTINGS_SAVED = "ch.patklaey.webdavsync.settingsSaved";
     private static final String PREF_CONNECTION_WORKS = "ch.patklaey.webdavsync.connectionWorks";
     private static final int REQUEST_BROWSE_REMOTE_DIRECTORY = 1;
@@ -76,6 +77,7 @@ public class MainActivity extends Activity {
         ((EditText) findViewById(R.id.settings_password_edittext)).setText(settings.getPassword());
         ((EditText) findViewById(R.id.settings_local_directory_edittext)).setText(settings.getLocalDirectory());
         ((EditText) findViewById(R.id.settings_remote_directory_edittext)).setText(settings.getRemoteDirectory());
+        ((CheckBox) findViewById(R.id.settings_wifi_only_checkbox)).setChecked(settings.wifiOnly());
 
         this.authenticationRequiredCheckboxChecked(findViewById(R.id.settings_auth_required_checkbox));
 
@@ -102,6 +104,7 @@ public class MainActivity extends Activity {
             }
             settings.setLocalDirectory(sharedPref.getString(PREF_LOCAL_DIRECTORY, ""));
             settings.setRemoteDirectory(sharedPref.getString(PREF_REMOTE_DIRECTORY, ""));
+            settings.setWifiOnly(sharedPref.getBoolean(PREF_WIFI_ONLY, true));
             this.connectionWorks = sharedPref.getBoolean(PREF_CONNECTION_WORKS, false);
         }
     }
@@ -145,6 +148,7 @@ public class MainActivity extends Activity {
                 editor.putString(PREF_REMOTE_DIRECTORY, settings.getRemoteDirectory());
                 editor.putBoolean(PREF_AUTH_REQUIRED, settings.authRequired());
                 editor.putBoolean(PREF_CHECK_CERT, settings.checkCert());
+                editor.putBoolean(PREF_WIFI_ONLY, settings.wifiOnly());
                 editor.putBoolean(PREF_CONNECTION_WORKS, this.connectionWorks);
                 editor.putBoolean(PREF_SETTINGS_SAVED, true);
                 if (!editor.commit()) {
@@ -212,6 +216,8 @@ public class MainActivity extends Activity {
         settings.setCheckCert(!((CheckBox) findViewById(R.id.settings_do_not_check_certs_checkbox)).isChecked());
 
         settings.setAuthRequired(((CheckBox) findViewById(R.id.settings_auth_required_checkbox)).isChecked());
+
+        settings.setWifiOnly(((CheckBox) findViewById(R.id.settings_wifi_only_checkbox)).isChecked());
 
         if (settings.authRequired()) {
             String username = ((TextView) findViewById(R.id.settings_username_edittext)).getText().toString();

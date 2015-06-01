@@ -1,5 +1,8 @@
 package ch.patklaey.webdavsync;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.FileObserver;
 import android.util.Log;
 import ch.patklaey.webdavsync.webdav.WebDavConnectionFactory;
@@ -16,13 +19,15 @@ public class AndroidFileObserver extends FileObserver implements WebDavActionCal
     private String uploadBasePath;
     private Sardine webdavConnection;
     private Settings settings;
+    private Context context;
 
-    public AndroidFileObserver(Settings settings) {
+    public AndroidFileObserver(Settings settings, Context context) {
         super(settings.getLocalDirectory(), FileObserver.ALL_EVENTS);
         this.basePath = settings.getLocalDirectory();
         this.uploadBasePath = settings.getWebdavUrl() + settings.getRemoteDirectory();
         this.webdavConnection = WebDavConnectionFactory.fromSettings(settings);
         this.settings = settings;
+        this.context = context;
         Log.d("Observer", "Stated for directory " + this.basePath + " and upload directory " + this.uploadBasePath);
     }
 
@@ -34,8 +39,36 @@ public class AndroidFileObserver extends FileObserver implements WebDavActionCal
         if (event == FileObserver.CREATE) {
             String filename = this.basePath + path;
             Log.d("Observer", "File " + filename + " created!");
-            new WebDavUploadAction(this.webdavConnection, this, this.uploadBasePath).execute(filename);
+            if (canUploadFile()) {
+                new WebDavUploadAction(this.webdavConnection, this, this.uploadBasePath).execute(filename);
+            } else {
+
+            }
         }
+    }
+
+    private boolean canUploadFile() {
+        if (this.settings.wifiOnly()) {
+            return phoneHasWifiConnection();
+        } else {
+            return phoneHasInternetConnection();
+        }
+    }
+
+    private boolean phoneHasWifiConnection() {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.getType() == ConnectivityManager.TYPE_WIFI
+                && activeNetwork.isConnectedOrConnecting();
+    }
+
+    private boolean phoneHasInternetConnection() {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
     @Override
