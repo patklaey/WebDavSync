@@ -36,6 +36,11 @@
         </activity>
         <activity android:name=".LocalFileSystemBrowser"/>
         <service android:name=".DirectoryListener"/>
+        <receiver android:name=".UploadQueue">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

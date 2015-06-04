@@ -9,6 +9,8 @@ public class DirectoryListener extends Service {
 
     public static final String LOG_TAG = DirectoryListener.class.getSimpleName();
     private AndroidFileObserver observer;
+    private UploadQueue uploadQueue;
+    private Settings settings;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -20,24 +22,25 @@ public class DirectoryListener extends Service {
         Log.d(LOG_TAG, "Starting service");
 
         SettingSaver settingSaver = new SettingSaver(this.getApplicationContext());
-        Settings settings;
 
         if (intent != null && intent.getBooleanExtra(MainActivity.EXTRA_STARTED_BY_APPLICATION, false)) {
-            settings = MainActivity.getSettings();
+            this.settings = MainActivity.getSettings();
             if (settingSaver.save(settings)) {
                 Log.d(LOG_TAG, "Settings saved successfully");
             } else {
                 Log.w(LOG_TAG, "Could not write settings to database");
             }
         } else {
-            settings = settingSaver.load();
+            this.settings = settingSaver.load();
         }
 
-        Log.d(LOG_TAG, "Using settings: " + settings.toString());
+        Log.d(LOG_TAG, "Using settings: " + this.settings.toString());
 
-        this.observer = new AndroidFileObserver(settings, this);
+        this.uploadQueue = new UploadQueue(this.getApplicationContext(), this.settings);
+
+        this.observer = new AndroidFileObserver(this.settings, this);
         this.observer.startWatching();
-        Log.d(LOG_TAG, "Observing " + settings.getLocalDirectory());
+        Log.d(LOG_TAG, "Observing " + this.settings.getLocalDirectory());
 
         return START_STICKY;
     }
@@ -46,6 +49,10 @@ public class DirectoryListener extends Service {
     public void onDestroy() {
         Log.d(LOG_TAG, "Stopping observation");
         this.observer.stopWatching();
+    }
+
+    public boolean addFileToUploadQueue(String filename) {
+        return this.uploadQueue.add(filename, this.settings.getWebdavUrl() + this.settings.getRemoteDirectory());
     }
 
 

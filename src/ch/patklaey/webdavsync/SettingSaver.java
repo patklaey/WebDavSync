@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class SettingSaver extends SQLiteOpenHelper {
 
 
-    private static final String DATABASE_NAME = "ch_patklaey_webdavsync";
+    public static final String DATABASE_NAME = "ch_patklaey_webdavsync";
     private static final int DATABASE_VERSION = 1;
 
     private static final String TABLE_NAME = "settings";
