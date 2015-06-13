@@ -14,6 +14,7 @@ import ch.patklaey.webdavsync.webdav.actions.WebDavUploadAction;
  */
 public class AndroidFileObserver extends FileObserver implements WebDavActionCaller {
 
+    public static final String LOG_TAG = AndroidFileObserver.class.getSimpleName();
     private String basePath;
     private String uploadBasePath;
     private Settings settings;
@@ -27,7 +28,7 @@ public class AndroidFileObserver extends FileObserver implements WebDavActionCal
         this.settings = settings;
         this.directoryListener = directoryListener;
         this.context = directoryListener.getApplicationContext();
-        Log.d("Observer", "Stated for directory " + this.basePath + " and upload directory " + this.uploadBasePath);
+        Log.d(LOG_TAG, "Stated for directory " + this.basePath + " and upload directory " + this.uploadBasePath);
     }
 
     @Override
@@ -37,7 +38,7 @@ public class AndroidFileObserver extends FileObserver implements WebDavActionCal
 
         if (event == FileObserver.CREATE) {
             String filename = this.basePath + path;
-            Log.d("Observer", "File " + filename + " created!");
+            Log.d(LOG_TAG, "File " + filename + " created!");
             if (canUploadFile()) {
                 new WebDavUploadAction(WebDavConnectionFactory.fromSettings(this.settings), this, this.uploadBasePath).execute(filename);
             } else {
@@ -72,6 +73,6 @@ public class AndroidFileObserver extends FileObserver implements WebDavActionCal
 
     @Override
     public void onActionResult(Object result) {
-        Log.d("Observer", "Result from upload action: " + result.toString());
+        Log.d(LOG_TAG, "Result from upload action: " + result.toString());
     }
 }

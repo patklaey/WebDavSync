@@ -11,6 +11,7 @@ import java.io.*;
  */
 public class WebDavUploadAction extends AsyncTask<String, Object, Boolean> {
 
+    public static final String LOG_TAG = WebDavUploadAction.class.getSimpleName();
     private Sardine webDavConncetion;
     private WebDavActionCaller caller;
     private boolean result;
@@ -32,15 +33,15 @@ public class WebDavUploadAction extends AsyncTask<String, Object, Boolean> {
             return false;
         }
 
-        Log.d("Uploader", "File to upload: " + params[0]);
+        Log.d(LOG_TAG, "File to upload: " + params[0]);
         File file = new File(params[0]);
         try {
             if (file.exists()) {
                 BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
                 this.webDavConncetion.put(this.uploadBaseDir + "/" + file.getName(), buf);
-                Log.d("Uploader", "Uploaded file " + this.uploadBaseDir + "/" + file.getName());
+                Log.d(LOG_TAG, "Uploaded file " + this.uploadBaseDir + "/" + file.getName());
             } else {
-                Log.d("Uploader", "The file " + file.getAbsolutePath() + " no longer exists, skipping it");
+                Log.d(LOG_TAG, "The file " + file.getAbsolutePath() + " no longer exists, skipping it");
             }
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block

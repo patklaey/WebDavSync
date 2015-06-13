@@ -18,9 +18,13 @@ import java.util.Map;
  */
 public class UploadQueue extends BroadcastReceiver implements WebDavActionCaller {
 
+    public static final String LOG_TAG = UploadQueue.class.getSimpleName();
     private static UploadQueueManager uploadQueueManager;
     private static Settings settings;
     private static boolean wifiConnectedReceived;
+
+    public UploadQueue() {
+    }
 
     public UploadQueue(Context context, Settings settings) {
         UploadQueue.uploadQueueManager = new UploadQueueManager(context);
@@ -30,12 +34,12 @@ public class UploadQueue extends BroadcastReceiver implements WebDavActionCaller
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("UploadQueue", "Received event");
+        Log.d(LOG_TAG, "Received event");
 
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
 
-        Log.d("UploadQueue", "Connection: " + activeNetInfo);
+        Log.d(LOG_TAG, "Connection: " + activeNetInfo);
 
         boolean isConnected = activeNetInfo != null && activeNetInfo.isConnectedOrConnecting();
         if (isConnected) {
@@ -54,16 +58,12 @@ public class UploadQueue extends BroadcastReceiver implements WebDavActionCaller
 
     private void uploadNextFileFromQueue() {
         if (!UploadQueue.uploadQueueManager.isEmpty()) {
-            Log.d("UploadQueue", "Uploading next file");
+            Log.d(LOG_TAG, "Uploading next file");
             Sardine webdavConnection = WebDavConnectionFactory.fromSettings(UploadQueue.settings);
             Map<String, String> resultMap = UploadQueue.uploadQueueManager.getNextUploadFile();
             new WebDavUploadAction(webdavConnection, this, resultMap.get("remote")).execute(resultMap.get("file"));
-            Log.d("UploadQueue", "Local file: " + resultMap.get("file") + ", remote location: " + resultMap.get("remote"));
+            Log.d(LOG_TAG, "Local file: " + resultMap.get("file") + ", remote location: " + resultMap.get("remote"));
         }
-    }
-
-
-    public UploadQueue() {
     }
 
     public boolean add(String filename, String uploadLocation) {
@@ -73,7 +73,7 @@ public class UploadQueue extends BroadcastReceiver implements WebDavActionCaller
 
     @Override
     public void onActionResult(Object result) {
-        Log.d("UploadQueue", "Received result " + result.toString());
+        Log.d(LOG_TAG, "Received result " + result.toString());
         if ((boolean) result && UploadQueue.uploadQueueManager.deleteNextFile()) {
             this.uploadNextFileFromQueue();
         }

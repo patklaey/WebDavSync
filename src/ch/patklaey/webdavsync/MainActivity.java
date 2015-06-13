@@ -284,15 +284,15 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int request_code, int result_code, Intent data) {
-        super.onActivityResult(request_code, result_code, data);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        if (request_code == REQUEST_BROWSE_REMOTE_DIRECTORY && result_code == RESULT_OK) {
+        if (requestCode == REQUEST_BROWSE_REMOTE_DIRECTORY && resultCode == RESULT_OK) {
             String selectedDirectory = data.getStringExtra(EXTRA_SELECTED_REMOTE_PATH);
             ((EditText) findViewById(R.id.settings_remote_directory_edittext)).setText(selectedDirectory);
         }
 
-        if (request_code == REQUEST_BROWSE_LOCAL_DIRECTORY && result_code == RESULT_OK) {
+        if (requestCode == REQUEST_BROWSE_LOCAL_DIRECTORY && resultCode == RESULT_OK) {
             String selectedDirectory = data.getStringExtra(EXTRA_SELECTED_LOCAL_PATH);
             ((EditText) findViewById(R.id.settings_local_directory_edittext)).setText(selectedDirectory);
         }
