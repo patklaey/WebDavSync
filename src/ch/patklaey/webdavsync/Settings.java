@@ -89,7 +89,7 @@ public class Settings {
                 ", authRequired=" + authRequired +
                 ", wifiOnly=" + wifiOnly +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
+                ", password=\'*\'" +
                 ", localDirectory='" + localDirectory + '\'' +
                 ", remoteDirectory='" + remoteDirectory + '\'' +
                 '}';

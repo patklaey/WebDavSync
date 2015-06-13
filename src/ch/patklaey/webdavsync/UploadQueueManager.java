@@ -10,9 +10,6 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by uni on 6/2/15.
- */
 public class UploadQueueManager extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;

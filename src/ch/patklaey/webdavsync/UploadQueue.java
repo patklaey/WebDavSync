@@ -54,6 +54,7 @@ public class UploadQueue extends BroadcastReceiver implements WebDavActionCaller
 
     private void uploadNextFileFromQueue() {
         if (!UploadQueue.uploadQueueManager.isEmpty()) {
+            Log.d("UploadQueue", "Uploading next file");
             Sardine webdavConnection = WebDavConnectionFactory.fromSettings(UploadQueue.settings);
             Map<String, String> resultMap = UploadQueue.uploadQueueManager.getNextUploadFile();
             new WebDavUploadAction(webdavConnection, this, resultMap.get("remote")).execute(resultMap.get("file"));

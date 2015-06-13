@@ -32,11 +32,16 @@ public class WebDavUploadAction extends AsyncTask<String, Object, Boolean> {
             return false;
         }
 
+        Log.d("Uploader", "File to upload: " + params[0]);
         File file = new File(params[0]);
         try {
-            BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
-            this.webDavConncetion.put(this.uploadBaseDir + "/" + file.getName(), buf);
-            Log.d("Uploader", "Uploaded file " + this.uploadBaseDir + "/" + file.getName());
+            if (file.exists()) {
+                BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
+                this.webDavConncetion.put(this.uploadBaseDir + "/" + file.getName(), buf);
+                Log.d("Uploader", "Uploaded file " + this.uploadBaseDir + "/" + file.getName());
+            } else {
+                Log.d("Uploader", "The file " + file.getAbsolutePath() + " no longer exists, skipping it");
+            }
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
